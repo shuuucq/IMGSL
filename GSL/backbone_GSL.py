@@ -52,13 +52,13 @@ class myGCN(torch.nn.Module):
 
     def forward(self, x, edge_index,edge_count=None):
         if edge_count is not None:
-            edge_count = edge_count.squeeze(1)  # 转换为 [num_edges] 形状
+            edge_count = edge_count.squeeze(1)  
             edge_min, edge_max = edge_count.min(), edge_count.max()
             edge_weight = (edge_count - edge_min) / (edge_max - edge_min)          
-            edge_weight = edge_weight.float()  # 确保是浮动类型
+            edge_weight = edge_weight.float() 
         else:
-            edge_weight = None  # 如果没有提供 edge_count，则不使用边权重
-        edge_index = edge_index.long()  # 确保是整数类型
+            edge_weight = None  
+        edge_index = edge_index.long() 
         x = F.relu(self.conv1(x, edge_index, edge_weight))
         x = self.conv2(x, edge_index, edge_weight)
         x = F.dropout(x, p=0.5, training=self.training)
@@ -145,14 +145,14 @@ class myGIN(torch.nn.Module):
 
     def forward(self, x, edge_index, edge_count=None): 
         if edge_count is not None:
-            edge_count = edge_count.squeeze(1)  # 转换为 [num_edges] 形状
-            mean_edge_count = edge_count.mean()  # 计算均值
-            std_edge_count = edge_count.std()    # 计算标准差
-            edge_weight = (edge_count - mean_edge_count) / std_edge_count  # 标准化
-            edge_weight = edge_weight.float()  # 确保是浮动类型
+            edge_count = edge_count.squeeze(1)  
+            mean_edge_count = edge_count.mean() 
+            std_edge_count = edge_count.std()  
+            edge_weight = (edge_count - mean_edge_count) / std_edge_count  
+            edge_weight = edge_weight.float()  
         else:
-            edge_weight = None  # 如果没有提供 edge_count，则不使用边权重
-        edge_index = edge_index.long()  # 确保是整数类型
+            edge_weight = None  
+        edge_index = edge_index.long()  
         x = self.conv1(x, edge_index,edge_weight)
         x = self.conv2(x, edge_index,edge_weight)
         node_embeddings = x
@@ -223,4 +223,5 @@ class myGAT(torch.nn.Module):
         return node_embeddings, F.log_softmax(x, dim=-1)
 
     def __repr__(self):
+
         return self.__class__.__name__
