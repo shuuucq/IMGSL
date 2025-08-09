@@ -46,13 +46,11 @@ parser.add_argument('--lr', type=float, default=0.01, help='specify the learning
 args = parser.parse_args()
 
 def load_pickle_files(base_path, fold, data_type):
-    """加载指定折的pickle文件"""
     file_name = f"{args.field}_{args.path}_fold_{fold + 1}_{data_type}.pkl"
     return joblib.load(os.path.join(base_path, file_name))
 
 
 def save_results_to_csv(filename, header, data):
-    """将结果保存为CSV文件，使用逗号分隔，如果文件存在则追加内容"""
     if not os.path.exists(filename):
         df = pd.DataFrame([data], columns=header)
         df.to_csv(filename, sep=',', index=False)
