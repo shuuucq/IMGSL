@@ -8,6 +8,7 @@ Before running the code, you need to install the required dependencies. You can 
 pip install -r requirements.txt
 ```
 ## How to Run
+```python
 python main.py \
   --dataset_name NLP \
   --conv_name GIN \
@@ -23,5 +24,6 @@ python main.py \
   --folds 10 \
   --beta 0.0001 \
   --lamb 0.0001
+```
 
 
