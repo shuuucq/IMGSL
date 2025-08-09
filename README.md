@@ -1,13 +1,13 @@
 # Citation-based Innovation Motif Graph Structure Learning for Scholar Profiling
-
+##
 ## Installation
 
 Before running the code, you need to install the required dependencies. You can do this by running the following command:
 
 ```bash
 pip install -r requirements.txt
-
-## run
+```
+## How to Run
 python main.py \
   --dataset_name NLP \
   --conv_name GIN \
@@ -23,4 +23,5 @@ python main.py \
   --folds 10 \
   --beta 0.0001 \
   --lamb 0.0001
+
 
