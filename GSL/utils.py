@@ -55,7 +55,7 @@ def seed_everything(seed=6789):
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
 seed_everything(6789)
-def normalize_adj(mx): #计算对称化的归一化矩阵
+def normalize_adj(mx):
     """Row-normalize matrix: symmetric normalized Laplacian"""
     rowsum = mx.sum(1)
     r_inv_sqrt = torch.pow(rowsum, -0.5).flatten()
@@ -128,10 +128,10 @@ def to_data_list(x, edge_index, y, batch):
     data_list = []
     base_num = 0
     for graph_id in range(idx_max+1):
-        node_idx = [i for i in range(len(batch)) if batch[i] == graph_id] #获取当前图graph_id的所有节点索引
-        new_x = x[node_idx] #获取节点特征和边
+        node_idx = [i for i in range(len(batch)) if batch[i] == graph_id] 
+        new_x = x[node_idx] 
         new_edge_index = subgraph(node_idx, edge_index)[0]
-        new_edge_index = new_edge_index - base_num #调整边索引
+        new_edge_index = new_edge_index - base_num
 
         data = Data(x=new_x, edge_index=new_edge_index, y=[y[graph_id]]) 
         data_list.append(data)
@@ -334,39 +334,39 @@ def visualize_graphs(fold, datasetname, path, graphs_list, new_graphs_list, num_
         new_graph = new_graphs_list[i]
 
         G_original = nx.Graph()
-        G_original.add_nodes_from(range(original_graph.x.size(0)))  # 添加所有节点
+        G_original.add_nodes_from(range(original_graph.x.size(0)))  
         for edge in original_graph.edge_index.t().tolist():
             if edge[0] != edge[1]: 
                 G_original.add_edge(edge[0], edge[1])
         
         G_new = nx.Graph()
-        G_new.add_nodes_from(range(new_graph.x.size(0)))  # 添加所有节点
+        G_new.add_nodes_from(range(new_graph.x.size(0))) 
         for edge in new_graph.edge_index.t().tolist():
             if edge[0] != edge[1]: 
                 G_new.add_edge(edge[0], edge[1])
 
-        # 删除无连边的节点
+  
         G_original.remove_nodes_from(list(nx.isolates(G_original)))
         G_new.remove_nodes_from(list(nx.isolates(G_new)))
 
-        # 获取当前图的节点索引
+   
         original_indices = list(G_original.nodes)
         new_indices = list(G_new.nodes)
 
-        # 使用相同的布局并拉大节点之间的距离
+
         pos_original = nx.spring_layout(G_original, k=1.5, iterations=50)
         pos_new = {node: pos_original[node] for node in G_new.nodes() if node in pos_original}
         
         new_correct = "correct" if new_graph['true_label'] == new_graph['prediction'] else "incorrect"
         origin_correct = "correct" if original_graph['true_label'] == original_graph['prediction'] else "incorrect"
         
-        # 从图对象中提取实际的节点数和边数
+ 
         original_node_count = G_original.number_of_nodes()
         original_edge_count = G_original.number_of_edges()
         new_node_count = G_new.number_of_nodes()
         new_edge_count = G_new.number_of_edges()
 
-        # 确保颜色列表与节点数匹配
+      
         original_node_labels = [original_graph.x[node, -1].item() for node in original_indices]
         new_node_labels = [new_graph.x[node, -1].item() for node in new_indices]
 
@@ -375,13 +375,12 @@ def visualize_graphs(fold, datasetname, path, graphs_list, new_graphs_list, num_
         original_colors = ['#6FC8CA' if label == 0 else '#3492B2' for label in original_node_labels]  # Lime Green for label 0, Violet for label 1
         new_colors = ['#58B8D1' if label == 0 else '#367DB0' for label in new_node_labels]  # Lemon Yellow for label 0, Tomato Red for label 1
 
-        # 统计有连边的 label=1 和 label=0 的节点个数
+
         original_label_0_count = sum(1 for label in original_node_labels if label == 0)
         original_label_1_count = sum(1 for label in original_node_labels if label == 1)
         new_label_0_count = sum(1 for label in new_node_labels if label == 0)
         new_label_1_count = sum(1 for label in new_node_labels if label == 1)
 
-        # 获取图的名称
         graph_name = extract_number(original_graph.name) if 'name' in original_graph else f'graph_{i+1}'
 
         ax = axes[0]
@@ -400,7 +399,7 @@ def visualize_graphs(fold, datasetname, path, graphs_list, new_graphs_list, num_
        
         output_file = os.path.join(output_dir, datasetname, path, f'{fold}-graph_{i+1}_{origin_correct}_{new_correct}.pdf')
         
-        # 确保路径存在
+
         os.makedirs(os.path.dirname(output_file), exist_ok=True)
         plt.savefig(output_file)
         plt.close(fig)
@@ -409,7 +408,7 @@ def visualize_graphs(fold, datasetname, path, graphs_list, new_graphs_list, num_
 
 
 def extract_number(name):
-    # 检查name是否为tensor类型，并提取数值
+
     if isinstance(name, torch.Tensor):
         name = name.item()
     match = re.findall(r'\d+', str(name))
@@ -417,7 +416,7 @@ def extract_number(name):
 
 def f1(precision, recall):
     if precision == 0 or recall == 0:
-        return 1e-10  # 返回一个极小的非零值，避免 F1 分数为零
+        return 1e-10  
     return (2 * precision * recall) / (precision + recall)
 def print_dataset_info(loader, loader_name="Loader"):
     print(f"Details of {loader_name}:")
