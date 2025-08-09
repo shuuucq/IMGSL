@@ -184,7 +184,8 @@ reports/*
 *.png
 *.pth
 *.pdf
-*.pkl
+*.pyc
+
 GSL/result/
 =======
 >>>>>>> 2b68ae0dc27a754cb2bfee4df4b8742ad8442ac9
