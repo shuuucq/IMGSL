@@ -109,7 +109,6 @@ def train_and_evaluate(model, train_loader, val_loader, test_loader, device, n_e
     return np.concatenate(y_real), np.concatenate(y_pred), np.concatenate(y_proba_minority)
 
 def load_pickle_files(base_path, fold, data_type):
-    """加载指定折的pickle文件"""
     file_name = f"{args.field}_{args.path}_fold_{fold + 1}_{data_type}.pkl"
     return joblib.load(os.path.join(base_path, file_name))
 
@@ -184,7 +183,6 @@ def main():
     Stability = np.array(Stability)
     print("Stability:", np.mean(Stability))
 
-    # 保存结果和超参数到CSV文件
     header = ["Field", "Path", "Method", "Learning Rate", "Precision", "Recall", "F1_best", "F1_best_std", "ROC", "ROC_std", "PRC", "ACC","all_F1_best"]
     data = [
         args.field, args.path, 'mlp', args.lr,
@@ -197,7 +195,6 @@ def main():
 
 
 def save_results_to_csv(filename, header, data):
-    """将结果保存为CSV文件，使用逗号分隔，如果文件存在则追加内容"""
     if not os.path.exists(filename):
         df = pd.DataFrame([data], columns=header)
         df.to_csv(filename, sep=',', index=False)
