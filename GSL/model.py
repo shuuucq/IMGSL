@@ -179,7 +179,7 @@ class GSL(torch.nn.Module):
              totall_new_embs = new_embs
         origin_embs, _ = self.conv_name_gnn(origin_batch_data.x, origin_batch_data.edge_index)
 
-        # 将所有图的嵌入进行池化
+   
         if self.args.readout == "max":
             new_embs = global_max_pool(totall_new_embs, new_batch_data.batch)
             origin_embs = global_max_pool(origin_embs, new_batch_data.batch)
@@ -188,7 +188,7 @@ class GSL(torch.nn.Module):
             new_embs = global_mean_pool(totall_new_embs, new_batch_data.batch)
             origin_embs = global_mean_pool(origin_embs, new_batch_data.batch)
 
-        # 计算正样本对
+    
         positive_pairs = torch.stack([origin_embs, new_embs], dim=1) 
         negative_pairs = []
         for i in range(num_sample):
@@ -221,7 +221,7 @@ class GraphLearner(nn.Module):
         self.datasetname = datasetname
         self.PATH = PATH
 
-        # 初始化线性层
+      
         end_path = os.path.basename(self.PATH)
         if end_path == 'data_extend':
             if self.datasetname=='NLP' or self.datasetname=='SoftwareEngineering'or self.datasetname=='HCI' or self.datasetname=='IR':
@@ -271,3 +271,4 @@ class GraphLearner(nn.Module):
         mask = (attention >= epsilon).float() 
         weighted_adjacency_matrix = attention * mask + markoff_value * (1 - mask)
         return weighted_adjacency_matrix
+
